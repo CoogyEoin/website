@@ -81,7 +81,7 @@ For each device, I needed to create a client that would measure the power using 
 The predicted power values were also checked with the same service to see if the power was too high. If the power exceeded a threshold an MQTT message was sent to the device to shut it down. This was congestion can be dealt with before it happens.
 A diagram of the pipeline can be seen below.</p>
 
-<p><img src="images/smart_grid2.png" alt="Diagram" title="Fecking class diagram there" /></p>
+<center><p><img src="images/smart_grid2.png" alt="Diagram" title="Fecking class diagram there" /></p></center>
 
 <p>The data that was being collected from the devices only contains power in Watts and a timestamp. The problem of trying to be tackled is a simple time-series prediction.</p>
 
@@ -90,7 +90,7 @@ A diagram of the pipeline can be seen below.</p>
 <p>I had an extremely hard time trying to find datasets for this model. With the Coronavirus going around I decided the best thing to do is to create a script for generating fake data.
 I knew that there were peak times that people would use the chargers (I chose 9am when people get to work and 1pm when they’re on break). So I used these times as weights and using Gaussian distributions I generated random time values that emphasized these values. A diagram of this data plotted can be seen below.</p>
 
-<p><img src="images/smart_grid3.png" alt="Diagram" title="Fecking class diagram there" /></p>
+<center><p><img src="images/smart_grid3.png" alt="Diagram" title="Fecking class diagram there" /></p></center>
 
 <p>This script may be useful to some people so I figured I’d create a separate Github repo for it. Check it out if you’re interested.</p>
 
@@ -105,7 +105,7 @@ The problem with ordinary RNN models is the weights it attributes to historic da
 
 <p>https:&#47;&#47;github.com&#47;CoogyEoin&#47;EV-charger-power-forecast-model</p>
 
-<p><img src="images/smart_grid4.png" alt="Diagram" title="Fecking class diagram there" /></p>
+<center><p><img src="images/smart_grid4.png" alt="Diagram" title="Fecking class diagram there" /></p></center>
 
 <p>Once we had the model a sagemaker instance was spun up on AWS and a lambda function invokes it twice a day. It reads in data from the dynamoDB table holding the total power values across all the devices and writes the predicted values to the same DB. All values that arrive in this table are fed through the IoT events service which checks to see if they’re too high. If they exceed a threshold (6 MW) it sends a message down to all the devices to start their shutdown sequence.</p>
 
