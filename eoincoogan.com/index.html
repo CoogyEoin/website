@@ -1,161 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <!-- Theme Made By www.w3schools.com - No Copyright -->
   <title>Eoin Coogan</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="style2.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-
-<!-- Navbar -->
-<nav class="navbar-fixed-top navbar-default">
-  <div class="container">
-    <div class="collapse navbar-collapse container" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-	<li><a href="https://articles.eoincoogan.com">My Articles</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- First Container -->
-<div class="container-fluid bg-1" id="opener">
-  <div class="container" align="center">
-    <h3 class="text-uppercase text-white font-weight-bold">Eoin Coogan</h3>
-    <h class="divider my-4" />
-    <p class="text-white-75 font-weight-light mb-5">Computer Engineer based in Dublin Ireland</p>
-    <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
-    <br><br>
-    <a href="https://www.linkedin.com/in/-eoin-coogan/"><i class="fa fa-linkedin" style="font-size:40px;"></i></a>
-    <a href="https://www.youtube.com/channel/UCehh50T6qtDpt_kEUF33GJw"><i class="fa fa-youtube" style="font-size:40px;"></i></a>
-    <a href="https://github.com/CoogyEoin"><i class="fa fa-github" style="font-size:40px;"></i></a>
-    <a href="https://eoincoogan-1.medium.com/"><i class="fa fa-medium" style="font-size:40px;"></i></a>
-  </div>        
-</div>
-
-<!-- Second Container -->
-<div class="container-fluid bg-2" id="about">
-  <br>
-  <center><h2>About Me</h2></center>
-  <br>
-  <div class="col-sm-8" align="left">
-    <p><b>This website is used to outline some of the projects I have engaged in both inside and outside of college. I have worked on a lot of projects related to topics involving cloud services, decentralised computing, machine learning and blockchain.
-  I have written documentation and created videos for each of these projects which can be observed in the section below. Articles related to these topics can also be read on my <a href="https://articles.eoincoogan.com">Website Here.</a> Or alternatively on my <a href="https://medium.com/@eoincoogan.1">Medium account.</a></b></p>
-  <br><br><br><br>
-  </div>
-  <div class="col-sm-4">
-    <img src="images/eoin_coogan_2.png" class="img-fluid">
-    <br><br><br><br>
+<div class="hero-image">
+  <div class="hero-text">
+    <h1>Eoin Coogan</h1>
+    <p>Computer engineer based in Ireland</p>
+    <a href="https://articles.eoincoogan.com"><button class="btn success">My articles</button></a>
   </div>
 </div>
 
-<!-- Third Container (Grid) -->
-<div class="container-fluid bg-3 text-center" id=projects>    
-  <h3 class="margin">Projects</h3><br>
-  <div class="row">
+<div class="row">
+  <div class="side">
+  <center>
+  <a href="https://www.linkedin.com/in/-eoin-coogan/"><p><u>LinkedIn</u></p></a>
+  <a href="https://www.youtube.com/channel/UCehh50T6qtDpt_kEUF33GJw"><p><u>YouTube</u></p></a>
+  <a href="https://github.com/CoogyEoin"><p><u>GitHub</u></p></a>
+  <a href="https://eoincoogan-1.medium.com/"><p><u>Medium</u></p></a>
+  </center>
+  </div>
+  <div class="main">
+  <center><h1>About Me</h1></center>
+  <p>This website is used to outline some of the projects I have engaged in both inside and outside of college. I have worked on a lot of projects related to topics involving cloud services, decentralised computing, machine learning and blockchain.
+  I have written documentation and created videos for each of these projects which can be observed in the section below. Articles related to these topics can also be read on my <a href="https://articles.eoincoogan.com">Website Here.</a> Or alternatively on my <a href="https://medium.com/@eoincoogan.1">Medium account.</a></p>
 
-    <div class="col-sm-4"> 
-      <div class="card">
-      <img class="card-img-top img-fluid"src="images/web_scraping.png" alt="Card image cap">
-        <div class="card-body">
-          <h2 class="card-title">Electricity data web scraper</h2>
-          <p class="card-text">
-            A web scraping application to gather data of the real-time electricity price of various regions
-          </p>
-          <a href="https://www.youtube.com/watch?v=iTcW1baULFE" class="btn btn-danger">Video</a>
-          <a href="https://towardsdatascience.com/web-scraping-with-python-and-aws-energy-saving-app-part-1-5c12eb78770a" class="btn btn-primary">Article</a>
-        </div>
-        <br>
-      </div>
+
+  <center><h1>Projects</h1></center>
+  <hr><br>
+  <div class="card">
+  <img src="images/web_scraping.png" alt="Avatar" style="width:100%">
+    <div class="container">
+      <center><h4><b>Electricity data web scraper</b></h4></center>
+      <p class="card-text">
+      A web scraping application to gather data of the real-time electricity price of various regions
+      </p>
+      <a href="https://www.youtube.com/watch?v=iTcW1baULFE" class="btn danger">Video</a>
+      <a href="https://towardsdatascience.com/web-scraping-with-python-and-aws-energy-saving-app-part-1-5c12eb78770a" class="btn primary">Article</a>
+
     </div>
-
-    <div class="col-sm-4">
-      <div class="card">
-      <img class="card-img-top img-fluid"src="images/prediction.png" alt="Card image cap">
-        <div class="card-body">
-          <h2 class="card-title">Smart Grid | EV Charger Monitoring and Prediction (Final Year Thesis)</h2>
-          <p class="card-text">
+  </div>
+  <br><hr>
+    <div class="card">
+  <img src="images/prediction.png" alt="Avatar" style="width:100%">
+    <div class="container">
+      <center><h4><b>Smart Grid | EV Charger Monitoring and Prediction (Final Year Thesis)</b></h4></center>
+      <p class="card-text">
             A platform for monitoring and predicting energy demand of electric vehicle chargers with machine learning
             and cloud services.
-          </p>
-          <a href="https://www.youtube.com/watch?v=INYVtGsyaWo" class="btn btn-danger">Video</a>
-          <a href="https://articles.eoincoogan.com/smart_grid.html"  class="btn btn-primary">Article</a>
-        </div>
-	</div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="card">
-        <img class="card-img-top img-fluid" src="images/pipeline.png" alt="Card image cap">
-        <div class="card-body">
-          <h2 class="card-title">IoT CI/CD Pipeline</h2>
-          <p class="card-text">
-            A continuous integration/ deployment pipeline for IoT devices using Jenkins, Ansible,
-            Docker, git and AWS.
-          </p>
-          <a href="https://www.youtube.com/watch?v=58NnyVfPmAE" class="btn btn-danger">Video</a>
-          <a href="https://medium.com/analytics-vidhya/building-an-iot-ci-cd-pipeline-aws-ansible-jenkins-docker-and-git-409cdf58ad4a" class="btn btn-primary">Article</a>
-        </div>
-        <br>
-      </div>
+       </p>
+       <a href="https://www.youtube.com/watch?v=INYVtGsyaWo" class="btn danger">Video</a>
+       <a href="https://articles.eoincoogan.com/smart_grid.html"  class="btn primary">Article</a>
     </div>
   </div>
-<br><br><br>
-<!-- Row 2 (Grid) -->
-  <div class="row">
-
-    <div class="col-sm-4"> 
-      <div class="card">
-      <img class="card-img-top img-fluid"src="images/kademlia.jpg" alt="Card image cap">
-        <div class="card-body">
-          <h2 class="card-title">Decentralised File Sharing Platform</h2>
-          <p class="card-text">
-            A completely decentralised data storage application using Kademlia distributed hash tables,
-            Node.js and blockchain.
-          </p>
-          <a href="https://www.youtube.com/watch?v=NvqqzUtCYqw" class="btn btn-danger">Video</a>
-          <a href="https://medium.com/the-capital/decentralized-file-storage-with-kademlia-and-iota-32812001b4b7" class="btn btn-primary">Article</a>
-        </div>
-        <br>
-      </div>
+  <br><hr>
+  <div class="card">
+  <img src="images/pipeline.png" alt="Avatar" style="width:100%">
+    <div class="container">
+      <center><h4><b>IoT CI/CD Pipeline</b></h4></center>
+      <p class="card-text">
+       A continuous integration/ deployment pipeline for IoT devices using Jenkins, Ansible, Docker, git and AWS.
+      </p>
+      <a href="https://www.youtube.com/watch?v=58NnyVfPmAE" class="btn danger">Video</a>
+          <a href="https://medium.com/analytics-vidhya/building-an-iot-ci-cd-pipeline-aws-ansible-jenkins-docker-and-git-409cdf58ad4a" class="btn primary">Article</a>
     </div>
-
-    <div class="col-sm-4"> 
-      <div class="card">
-         <img class="card-img-top img-fluid"src="images/circuit.jpeg" alt="Card image cap">
-        <div class="card-body">
-          <h2 class="card-title">IoT heart rate monitor (final-year project 2018)</h2>
-          <p class="card-text">
-            An IoT heartrate monitor that measures your BPM, sends your data to the cloud
-            and notifies you on your phone when your heart rate is abnormal.
-          </p>
-          <a href="https://www.youtube.com/watch?v=p8E7aewsgrs" class="btn btn-danger">Video</a>
-        </div>
-      </div>
+  </div>
+  <br><hr>
+  <div class="card">
+  <img src="images/kademlia.jpg" alt="Avatar" style="width:100%">
+    <div class="container">
+      <center><h4><b>Decentralised File Sharing Platform</b></h4></center>
+      <p class="card-text">
+      A completely decentralised data storage application using Kademlia distributed hash tables, Node.js and blockchain.
+      </p>
+      <a href="https://www.youtube.com/watch?v=NvqqzUtCYqw" class="btn danger">Video</a>
+          <a href="https://medium.com/the-capital/decentralized-file-storage-with-kademlia-and-iota-32812001b4b7" class="btn primary">Article</a>
     </div>
-    
+  </div>
   </div>
 </div>
 
-<div class="container-fluid bg-2 text-center" id=contact>
-  <h3 class="margin">Contact</h3>
-  <a href="mailto:contact@eoincoogan.com" class="btn btn-default btn-lg">
-    <span class="glyphicon glyphicon-envelope"></span>Email
-  </a>
-  <a href="https://www.linkedin.com/in/-eoin-coogan/" class="btn btn-default btn-lg">
-    <span class="glyphicon glyphicon-search"></span>LinkedIn
-  </a>
-</div>
-
-<!-- Footer -->
-<footer class="container-fluid bg-4 text-center">
-  <p>Made by Eoin Coogan @2019</p> 
+<footer class="footer">
+  
+  <p>Made by Eoin Coogan @2021</p>
 </footer>
-
 </body>
 </html>
 
