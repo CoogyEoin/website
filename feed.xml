@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>Eoin Coogan's Website</title>
+  <link>https://eoincoogan.com</link>
+  <description>Articles discussing various topics related to Technology and Society</description>
+  <language>en-ie</language>
+  <item>
+    <title>Setup a Pleroma instance (Decentralised social media)</title> 
+    <pubDate>Jan 27 2021</pubDate>
+    <link>https://articles.eoincoogan.com/pleroma.html</link>
+    <description><![CDATA[Set up Pleroma an open source and decentralised social media platform you can host yourself!]]></description>
+  </item>
+</channel>
+
+</rss>
