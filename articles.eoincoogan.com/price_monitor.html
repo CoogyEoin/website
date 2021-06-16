@@ -1,0 +1,213 @@
+<html lang="en">
+<head>
+  <title>Eoin's Articles</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar-fixed-top navbar-default">
+  <div class="container">
+    <div class="collapse navbar-collapse container" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="https://eoincoogan.com">Home</a></li>
+        <li class="active"><a href="https://articles.eoincoogan.com">My Articles</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('images/background.png')">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="post-heading">
+          <h1>Web Scraping Energy Data with Python and AWS</h1>
+          <h3 class="subheading">Building an app on AWS to help save energy bills and the environment</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+<h1>Web Scraping with Python and AWS</h1>
+
+<p>Building an app on AWS to help save energy bills and the environment</p>
+
+<p>The idea behind this article came to me a while back. While writing a previous article about predicting energy demand I thought of the idea to build an app that would notify users when electricity prices are high. Originally this was an addition to the previous application but I quickly realized that regular people would get more benefit out of it.</p>
+
+<p>I haven't worked on the app itself but to summarize the back-end will gather real-time electricity prices and notify users when the price rises in their location. This allows people who use time-of-use utility plans to reduce their bills and help offload the demand on the grid during peak times.
+The backend of the mobile app (all the stuff the user doesn’t see) will require a web-scraping script to gather this price data from the various ISO websites. This article will discuss how I did that using only python and some AWS services.</p>
+
+<p>Web-scraping is just the process of gathering data from a website using a software program. Although using APIs are desirable it’s not uncommon to find that some web services don’t provide them (or only allow stakeholders to access them). This means we need to find alternative ways to get this data.
+The scripts themselves are relatively simple. Once they are written though we need a way to run them automatically and in a scalable way. This is where using AWS services comes in handy.</p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>Scripts that will gather the price data from ISO websites.</li>
+<li>Store the price data in a database for further use.</li>
+<li>Automate the scripts so they run every 5 minutes.</li>
+</ul>
+
+<p>The script I wrote uses the requests python library to make a get request to the ISO website. The response contains the typical HTML code that can be seen using inspect elements on a webpage. Another library called Beautiful Soup is used to prettify this HTML code and allows elements to be found easily. The code for one of the ISOs can be seen below.</p>
+
+<pre>
+<code>
+import requests
+import logging
+from bs4 import BeautifulSoup
+dict = {
+   "DPL":"",
+   "COMED":"",
+   "AEP":"",
+   "EKPC":"",
+   "PEP":"",
+   "JC":"",
+   "PL":"",
+   "DOM":""
+}
+def main():
+    try:
+        URL = 'https://www.pjm.com/'
+        page = requests.get(URL)
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+        """
+        There are multiple tables of class 'lmp-price-table'. This
+        loop goes through all the divs in the tables containing the RSO name 
+        and the LMP and if the key exists in the dictionary (Keys are the RSO 
+        name) then it stores the next divs text as the value
+        """
+        for i in soup.find_all('ul', class_='lmp-price-table'):
+            divs = i.findChildren('div')
+            j=0
+            while j < len(divs):
+                value = divs[j].text
+                if value in lmp_dict:
+                    lmp_dict[value] = divs[j+1].text
+                j+=1
+            
+        print(lmp_dict)
+
+
+    except Exception as e:
+        raise e
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+
+
+<p>A script was created for a few different ISOs which each have different websites. The scripts can be viewed in my GitHub repo below.</p>
+
+<p><a href="https://github.com/CoogyEoin/grianity_price_scripts">Github Repo</a></p>
+
+<p>Once the scripts worked they needed to be hosted on AWS. Lambda is a service specifically for simple scripts that allows you to invoke them from other services or on a schedule with CloudWatch. More information can be found here.
+We also needed to store the price data in a database. I decided to use DynamoDB which is a NoSQL DB because it is much cheaper for read operations (we’ll only be writing new data every 5 minutes) and if the schema needs to change in the future there won’t be any major issues.
+So the Lambda function needed to have some additional handlers so that it could be ran and an additional function for putting the data to DynamoDB. One of the scripts can be seen in the code section below.</p>
+
+<pre><code>
+import json
+import boto3
+import os
+import requests
+from datetime import datetime, timedelta
+import logging
+from bs4 import BeautifulSoup
+
+
+
+def get_timestamp():
+    # current date and time
+    now = datetime.now()
+    
+    # Convert the hour from UST to EST using environment value 'time_addition'
+    hour_value = int(os.environ['time_addition'])
+    now += timedelta(hours=hour_value)
+   
+    return now.strftime ('%Y%m%d%H%M') 
+    
+    
+def get_value():
+    URL = 'http://oasis.caiso.com/oasisapi/prc_hub_lmp/PRC_HUB_LMP.html'
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    lmp_values=[]
+    lmp_dict = {}
+    for i in soup.find_all('tr', class_='datarow'):
+        for j in i.findChildren('td'):
+            #Removes the rediculous whitespace in CAISO webpage
+            breadcrum = "".join(line.strip() for line in j.text.split("\n"))
+            lmp_values.append(breadcrum)
+
+    lmp_value = lmp_values[1]
+    
+    #Returns lmp_value without the first character ( $ )
+    return lmp_value[1:]
+    
+    
+def put_item(lmp_value, time_stamp, region):
+    client = boto3.client('dynamodb', region_name=os.environ['aws_region'])
+    return client.put_item(
+            TableName=os.environ['table_name'],
+            Item={
+                'price': { "S": lmp_value},
+                'region_name': { "S": region},
+                'timestamp': { "S": time_stamp}
+            }
+            )
+    
+
+def lambda_handler(event, context):
+
+    client = boto3.client('dynamodb', region_name=os.environ['aws_region'])
+    
+    try:
+        lmp_value = get_value()
+        time_stamp = get_timestamp()
+        response = put_item(lmp_value, time_stamp, "caiso")
+        
+        return response
+
+    except Exception as e:
+        raise e
+</pre></code>
+
+
+<p>Once the scripts were working and storing data in the DynamoDB table the only thing left to do is to automate it. CloudWatch is a service which is really handy for collecting logs from events. Lambda functions by default publish logs using CloudWatch whenever it runs.
+Under the events section of the CloudWatch dashboard there is an option to create a schedule. I set the schedule for 5 minutes and the target as my two lambda scripts. This means we don’t have to worry about any issues with running a fail/success events can be monitored if you need to know about them (such as sending an email to you on failure to run).</p>
+
+<p>There is a lot more to do with this project but for the time being, that’s everything to do with the data collection. </p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- Footer -->
+ <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <a href="https://github.com/CoogyEoin"><i class="fa fa-github" style="font-size:40px;"></i></a>
+            <br>
+            <p>Made by Eoin Coogan @2019</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>

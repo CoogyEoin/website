@@ -1,0 +1,214 @@
+<html lang="en">
+<head>
+  <title>Eoin's Articles</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar-fixed-top navbar-default">
+  <div class="container">
+    <div class="collapse navbar-collapse container" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="https://eoincoogan.com">Home</a></li>
+        <li class="active"><a href="https://articles.eoincoogan.com">My Articles</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('images/background.png')">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="post-heading">
+          <h1>Decentralized File Storage with Kademlia and IOTA</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+<h1>Decentralized File Storage with Kademlia and IOTA</h1>
+
+<p>It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers.
+In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes.</p>
+
+<h2>Software Libraries used</h2>
+
+<ul>
+<li><a href="https://kadence.github.io/">Kadence library</a></li>
+<li><a href="https://github.com/iotaledger/iota.js">Iota javascript library</a></li>
+</ul>
+
+<h2>Overview</h2>
+
+<p>Kademlia is a distributed hash table. It uses key-value pairs similarly to regular hash maps but it stores them on various nodes connected to it. It searches for the node with an ID that closely resembles the key in the routing table of each node until it finds the closest match. This allows it to find and store data in O(log(n)) time while only needing a small amount of addresses in the routing table. I used the Kadence library to implement a Kademlia network.</p>
+
+<p>Iota is a distributed ledger technology similar to blockchain but has a completely different structure. It is incredibly fast and is useful for projects where you use micro transactions.</p>
+
+<p>A basic Kademlia node will be ran that allows us to store and retrieve small bits of data and the Iota token will be used to pay small amounts to any node that stores the data.</p>
+
+<h2>Project Discussion</h2>
+
+<p>Kademlia requires two or more nodes to store data on the network. In my code I set up two nodes running on localhost and used the join method so one would connect to the other.</p>
+
+<pre><code>
+const node = new kadence.KademliaNode({
+  identity: kadence.utils.getRandomKeyBuffer(),
+  transport: new kadence.UDPTransport(),
+  storage: levelup(encode(leveldown('database'))),
+  contact: { hostname: 'localhost', port: 1337 }
+});
+//Creating second node object//
+const nodeTwo = new kadence.KademliaNode({
+  identity: kadence.utils.getRandomKeyBuffer(),
+  transport: new kadence.UDPTransport(),
+  storage: levelup(encode(leveldown('secondDB'))),
+  contact: { hostname: 'localhost', port: 8080 }
+});
+//Listening on ports of each node//
+node.listen(1337);
+nodeTwo.listen(8080);
+
+//Node joins network through nodeTwo//
+node.join([ nodeTwo.identity, {
+  hostname: 'localhost',
+  port: 8080
+}], async () => {
+//Rest of the article's code
+//goes in here besides the use
+//Methods and the sendIota function
+});
+</code></pre>
+
+<p>The next thing required is to use the iterativeStore() function. This takes a key and a value as parameters. It finds K closest node IDs to the key and stores them on that node’s local storage. </p>
+
+<pre><code>
+//Details for key and Value we want to store//
+const key = kadence.utils.getRandomKeyBuffer();
+const Value = 'Elon Did Nothing Wrong'
+console.log('The key is: ');
+console.log(key);
+
+node.iterativeStore(key, Value, function (err, data) {
+   if (err) {
+       return console.error(err);
+   }
+    else{
+       console.log(data); 
+    }
+});
+</code></pre>
+
+<p>The KadenceNode class also has a function called iterativeFindValue. It normally returns an array of Entities which are a type with a Node ID, value and timestamp. This is what is needed to return the value again but for some reason when you first call the function it just returns an Array of Node IDs that the value was stored on.
+Happy accident since I can use this to send Iota tokens to all the nodes.
+I made a handler for each of the nodes that would send their Iota address. I then created a function called sendIota() that would connect to an Iota full node, prepare a transaction then attach it to the tangle. </p>
+
+<pre><code>
+node.use('IOTA', (req, res) => {
+    const iota = 'QVFEHDRITCVU9LTPSNQGGQRELGSSBOMQG9XFWSLBRTUYDZMUFLSOWGYNS9ZW9UOAYWSBBJKHFZESDGWMZOQKDQOUSY';
+    res.send(iota);
+  });
+nodeTwo.use('IOTA', (req, res) => {
+      const iota = 'CEEMLNFZSOOXVCTDNXZXWZBVVYZTJW9XKBWPHXKABB9FCSJMNLXZJ9UZTODXBSFSGRCYOILEFSQSTREPY9EGVFZTHZ';
+    res.send(iota);
+  });
+
+function sendIota(Address, Seed){
+    const iota = iotaCore.composeAPI({ provider: 'https://testnet140.tangle.works'})
+
+const msg = converter.asciiToTrytes('Thanks for the storage');
+
+// Array of transfers which defines transfer recipients and value transferred in IOTAs.
+    const transfers = [{
+        address: Address,
+        value: 0, // 1Ki
+        tag: '', // optional tag of 0-27 trytes
+        message: msg // optional message in trytes
+    }]
+
+iota.prepareTransfers(Seed, transfers)
+.then(trytes =&gt; iota.sendTrytes(trytes, 3, 14))
+.then(bundle =&gt; {
+    console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
+    console.log(`Bundle: ${bundle}`)
+
+    res.send(bundle[0].hash)
+})
+.catch(err =&gt; {
+    // catch any errors
+})
+
+}
+</code></pre>
+
+<p>The last thing I needed to do was search through the array of Node IDs returned by the iterativeFindValue() function and call the sendIota() function for each address. I did this using a for loop.</p>
+
+<pre><code>
+node.iterativeFindValue(key, function (error, value, contact){
+    if (error) {
+       return console.error(err);
+   }
+    else{ 
+        const resp = value;
+        //const publisher = value.publisher;
+        const len = resp.length;
+
+    for(var i = 0; i &lt; len; i++){
+
+    node.send('IOTA', ['Iota Address'], resp[i], function (err, result){
+        if (error) {
+           return console.error(err);
+        }  
+        else{
+            console.log(result);
+
+            sendIota(result, mySeed);
+        }
+    });
+
+    }
+}
+
+});
+
+</code></pre>
+
+<p>The code creates two nodes and stores data across each of them. It then sends Iota tokens to the address of any node that stores the data.
+This is a very broad overview of how DHTs and Iota could be used for storing files and is not meant to actually be used. My code can be found in my github below along with my social media.</p>
+
+<p>Thanks for reading.</p>
+
+<p><a href="https://github.com/CoogyEoin/Decentralised-Kademlia-File-Storage">Github Repo</a></p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- Footer -->
+ <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <a href="https://github.com/CoogyEoin"><i class="fa fa-github" style="font-size:40px;"></i></a>
+            <br>
+            <p>Made by Eoin Coogan @2019</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
