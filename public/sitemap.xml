@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://eoincoogan.com/posts/smart_grid/</loc>
+    <lastmod>2022-11-01T16:03:56+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/</loc>
+    <lastmod>2022-11-01T16:03:56+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/posts/</loc>
+    <lastmod>2022-11-01T16:03:56+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/posts/electriciy_web_scraper/</loc>
+    <lastmod>2022-11-01T15:57:17+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/posts/iot_ci_cd_pipeline/</loc>
+    <lastmod>2022-11-01T15:52:14+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/posts/decentralised_server/</loc>
+    <lastmod>2022-11-01T14:41:40+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/contact/</loc>
+    <lastmod>2022-11-01T14:40:48+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/about/</loc>
+    <lastmod>2022-11-01T14:40:41+00:00</lastmod>
+  </url><url>
+    <loc>http://eoincoogan.com/categories/</loc>
+  </url><url>
+    <loc>http://eoincoogan.com/tags/</loc>
+  </url>
+</urlset>

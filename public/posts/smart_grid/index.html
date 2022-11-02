@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM) | Eoin&#39;s Website</title>
+<meta name="keywords" content="">
+<meta name="description" content="Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed.">
+<meta name="author" content="">
+<link rel="canonical" href="http://eoincoogan.com/posts/smart_grid/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://eoincoogan.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://eoincoogan.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://eoincoogan.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://eoincoogan.com/apple-touch-icon.png">
+<link rel="mask-icon" href="http://eoincoogan.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)" />
+<meta property="og:description" content="Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://eoincoogan.com/posts/smart_grid/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-01T16:03:56+00:00" />
+<meta property="article:modified_time" content="2022-11-01T16:03:56+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)"/>
+<meta name="twitter:description" content="Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://eoincoogan.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)",
+      "item": "http://eoincoogan.com/posts/smart_grid/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)",
+  "name": "Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)",
+  "description": "Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed. To relieve the strain being placed on the grid and transition to a more sustainable future we need smarter infrastructure that is better capable of dealing with congestion.\nIn this article, I’m going to discuss how I managed to build a platform that monitors the power consumption of EV chargers and predicts future consumption using machine learning. If you are interested in further discussion on the IoT/Cloud side of things check out the video I made on the topic.\nThis project had a few main parts:\nThe embedded system to monitor and calculate the power being consumed.\nCommunication channels between the chargers and gateways.\nThe cloud services for processing data and running the ML models.\nA custom dashboard that stakeholders could use to see data.\nThe first thing I needed was a way to measure and gather the data needed to perform further analysis. There are two use cases for a platform like this, chargers that are out in the public and chargers that are in people’s homes. For Level 2 chargers that people have in their homes, MQTT can be used with their Wi-Fi router to send data to the cloud. Things get a bit trickier with the public chargers though. Since they aren’t near a reliable Wi-Fi connection another communication protocol is needed.\nI chose to use LoraWan a protocol that allows devices to send messages up to 10 Km away. I decided to use LoraWan as it had better bandwidth and more public gateways than SigFox and it was way cheaper than using a cell network. For each device, I needed to create a client that would measure the power using a current clamp sensor and send via MQTT or LoraWan. The code for each of these can be seen in the Githubs below.\nhttps://github.com/CoogyEoin/ev_mqtt_monitor\nhttps://github.com/CoogyEoin/MQTTHandler\nI wrote in a previous article about how I set up a continuous integration/development pipeline for these devices so they can be remotely updated. Check it out if you’re interested.\nI decided to use AWS as a cloud provider because I was most familiar with their services. I set up a full data pipeline that stored the raw data, sampled the data per hour and stored it, calculated the combined power load across all devices and stored that, invoked a ML model bi-daily and monitored the power to see if it had reached a threshold. The predicted power values were also checked with the same service to see if the power was too high. If the power exceeded a threshold an MQTT message was sent to the device to shut it down. This was congestion can be dealt with before it happens. A diagram of the pipeline can be seen below.\nThe data that was being collected from the devices only contains power in Watts and a timestamp. The problem of trying to be tackled is a simple time-series prediction.\nI also added a value for a shortage sensor reading in case something like this might be needed in the future. Sometimes the cables of these chargers deteriorate and the current shorts to the car’s chassis which is a very serious health hazard and relevant stakeholders should be notified immediately. It wasn’t analysed in this project though.\nI had an extremely hard time trying to find datasets for this model. With the Coronavirus going around I decided the best thing to do is to create a script for generating fake data. I knew that there were peak times that people would use the chargers (I chose 9am when people get to work and 1pm when they’re on break). So I used these times as weights and using Gaussian distributions I generated random time values that emphasized these values. A diagram of this data plotted can be seen below.\nThis script may be useful to some people so I figured I’d create a separate Github repo for it. Check it out if you’re interested.\nhttps://github.com/CoogyEoin/TimeSeriesDataGenerator\nEV chargers have specific peak times that they are used which makes the data reasonably periodic. So a traditional signal analysis method such as Fourier analysis could be used. The problem with this is that external events (nice weather, sporting events etc..) have a large impact on the power consumption and these events can drastically throw off the model.\nDeep learning algorithms have been used for many different types of problems such as classification and prediction like this problem. RNN models are particularly good at dealing with sequential data. The problem with ordinary RNN models is the weights it attributes to historic data over recent data. With this project, the most recent power values are much more important than historic trends when making a prediction.\nLong Short Term Memory (LSTM) is a model that is used with sequential data like RNNs but allows us to emphasis recent data (In this case the past 12 hours). Although I haven’t tested other algorithms I got a Mean Square Average error value of 0.009 with this model. The Jupyter notebook can be seen in my GitHub repo below.\nhttps://github.com/CoogyEoin/EV-charger-power-forecast-model\nOnce we had the model a sagemaker instance was spun up on AWS and a lambda function invokes it twice a day. It reads in data from the dynamoDB table holding the total power values across all the devices and writes the predicted values to the same DB. All values that arrive in this table are fed through the IoT events service which checks to see if they’re too high. If they exceed a threshold (6 MW) it sends a message down to all the devices to start their shutdown sequence.\nI created a simple Django webpage that queries AWS every few minutes and plots the real time data. If you want you can check it out in the video.\nThere are a lot of things I could have done differently or refactored but this being my final year project I wanted to get something working that I could show. There’s a lot of things that could be added such as better integration with the LoraWan backend or a cloud formation template for setting new users up. The platform overall monitors the power being consumed from EV chargers, predicts power consumption for the next 12 hours and automatically balances the demand before the consumption becomes a problem.\nHopefully, services like this can be used in the future so that we can make our energy use more sustainable.\n",
+  "wordCount" : "1157",
+  "inLanguage": "en",
+  "datePublished": "2022-11-01T16:03:56Z",
+  "dateModified": "2022-11-01T16:03:56Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://eoincoogan.com/posts/smart_grid/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Eoin's Website",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://eoincoogan.com/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://eoincoogan.com/" accesskey="h" title="Eoin&#39;s Website (Alt + H)">Eoin&#39;s Website</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)
+    </h1>
+    <div class="post-meta"><span title='2022-11-01 16:03:56 +0000 UTC'>November 1, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed. To relieve the strain being placed on the grid and transition to a more sustainable future we need smarter infrastructure that is better capable of dealing with congestion.</p>
+<p>In this article, I’m going to discuss how I managed to build a platform that monitors the power consumption of EV chargers and predicts future consumption using machine learning. If you are interested in further discussion on the IoT/Cloud side of things check out the video I made on the topic.</p>
+<p>This project had a few main parts:</p>
+<ul>
+<li>
+<p>The embedded system to monitor and calculate the power being consumed.</p>
+</li>
+<li>
+<p>Communication channels between the chargers and gateways.</p>
+</li>
+<li>
+<p>The cloud services for processing data and running the ML models.</p>
+</li>
+<li>
+<p>A custom dashboard that stakeholders could use to see data.</p>
+</li>
+</ul>
+<p>The first thing I needed was a way to measure and gather the data needed to perform further analysis. There are two use cases for a platform like this, chargers that are out in the public and chargers that are in people’s homes. For Level 2 chargers that people have in their homes, MQTT can be used with their Wi-Fi router to send data to the cloud. Things get a bit trickier with the public chargers though. Since they aren’t near a reliable Wi-Fi connection another communication protocol is needed.</p>
+<p>I chose to use LoraWan a protocol that allows devices to send messages up to 10 Km away. I decided to use LoraWan as it had better bandwidth and more public gateways than SigFox and it was way cheaper than using a cell network. For each device, I needed to create a client that would measure the power using a current clamp sensor and send via MQTT or LoraWan. The code for each of these can be seen in the Githubs below.</p>
+<p><a href="https://github.com/CoogyEoin/ev_mqtt_monitor">https://github.com/CoogyEoin/ev_mqtt_monitor</a></p>
+<p><a href="https://github.com/CoogyEoin/MQTTHandler">https://github.com/CoogyEoin/MQTTHandler</a></p>
+<p>I wrote in a previous article about how I set up a continuous integration/development pipeline for these devices so they can be remotely updated. Check it out if you’re interested.</p>
+<p>I decided to use AWS as a cloud provider because I was most familiar with their services. I set up a full data pipeline that stored the raw data, sampled the data per hour and stored it, calculated the combined power load across all devices and stored that, invoked a ML model bi-daily and monitored the power to see if it had reached a threshold. The predicted power values were also checked with the same service to see if the power was too high. If the power exceeded a threshold an MQTT message was sent to the device to shut it down. This was congestion can be dealt with before it happens. A diagram of the pipeline can be seen below.</p>
+<p><img loading="lazy" src="/images/smart_grid2.png" alt="Diagram"  />
+</p>
+<p>The data that was being collected from the devices only contains power in Watts and a timestamp. The problem of trying to be tackled is a simple time-series prediction.</p>
+<p><em>I also added a value for a shortage sensor reading in case something like this might be needed in the future. Sometimes the cables of these chargers deteriorate and the current shorts to the car’s chassis which is a very serious health hazard and relevant stakeholders should be notified immediately. It wasn’t analysed in this project though.</em></p>
+<p>I had an extremely hard time trying to find datasets for this model. With the Coronavirus going around I decided the best thing to do is to create a script for generating fake data. I knew that there were peak times that people would use the chargers (I chose 9am when people get to work and 1pm when they’re on break). So I used these times as weights and using Gaussian distributions I generated random time values that emphasized these values. A diagram of this data plotted can be seen below.</p>
+<p><img loading="lazy" src="/images/smart_grid3.png" alt="Diagram"  />
+</p>
+<p>This script may be useful to some people so I figured I’d create a separate Github repo for it. Check it out if you’re interested.</p>
+<p><a href="https://github.com/CoogyEoin/TimeSeriesDataGenerator">https://github.com/CoogyEoin/TimeSeriesDataGenerator</a></p>
+<p>EV chargers have specific peak times that they are used which makes the data reasonably periodic. So a traditional signal analysis method such as Fourier analysis could be used. The problem with this is that external events (nice weather, sporting events etc..) have a large impact on the power consumption and these events can drastically throw off the model.</p>
+<p>Deep learning algorithms have been used for many different types of problems such as classification and prediction like this problem. RNN models are particularly good at dealing with sequential data. The problem with ordinary RNN models is the weights it attributes to historic data over recent data. With this project, the most recent power values are much more important than historic trends when making a prediction.</p>
+<p>Long Short Term Memory (LSTM) is a model that is used with sequential data like RNNs but allows us to emphasis recent data (In this case the past 12 hours). Although I haven’t tested other algorithms I got a Mean Square Average error value of 0.009 with this model. The Jupyter notebook can be seen in my GitHub repo below.</p>
+<p><a href="https://github.com/CoogyEoin/EV-charger-power-forecast-model">https://github.com/CoogyEoin/EV-charger-power-forecast-model</a></p>
+<p><img loading="lazy" src="/images/smart_grid4.png" alt="Diagram"  />
+</p>
+<p>Once we had the model a sagemaker instance was spun up on AWS and a lambda function invokes it twice a day. It reads in data from the dynamoDB table holding the total power values across all the devices and writes the predicted values to the same DB. All values that arrive in this table are fed through the IoT events service which checks to see if they’re too high. If they exceed a threshold (6 MW) it sends a message down to all the devices to start their shutdown sequence.</p>
+<p>I created a simple Django webpage that queries AWS every few minutes and plots the real time data. If you want you can check it out in the video.</p>
+<p>There are a lot of things I could have done differently or refactored but this being my final year project I wanted to get something working that I could show. There’s a lot of things that could be added such as better integration with the LoraWan backend or a cloud formation template for setting new users up. The platform overall monitors the power being consumed from EV chargers, predicts power consumption for the next 12 hours and automatically balances the demand before the consumption becomes a problem.</p>
+<p>Hopefully, services like this can be used in the future so that we can make our energy use more sustainable.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="http://eoincoogan.com/">Eoin&#39;s Website</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

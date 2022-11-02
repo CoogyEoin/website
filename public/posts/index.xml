@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Eoin&#39;s Website</title>
+    <link>http://eoincoogan.com/posts/</link>
+    <description>Recent content in Posts on Eoin&#39;s Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Nov 2022 16:03:56 +0000</lastBuildDate><atom:link href="http://eoincoogan.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Smart Grid | Predicting EV charger demand with Machine Learning (LSTM)</title>
+      <link>http://eoincoogan.com/posts/smart_grid/</link>
+      <pubDate>Tue, 01 Nov 2022 16:03:56 +0000</pubDate>
+      
+      <guid>http://eoincoogan.com/posts/smart_grid/</guid>
+      <description>Climate change is one of the greatest issues facing society. With an overwhelming scientific consensus on the effect of man-made carbon emissions on climate change, many world governments are aiming to reduce their reliance on fossil fuels. With an increase in the amount of renewable energy sources and electric vehicles on the road, there is a new issue that we need to tackle. The power output from renewable sources isn’t constant and with EV charger peak times being different we are left with an abundance of energy when it’s least needed.</description>
+    </item>
+    
+    <item>
+      <title>Web Scraping Energy Data with Python and AWS</title>
+      <link>http://eoincoogan.com/posts/electriciy_web_scraper/</link>
+      <pubDate>Tue, 01 Nov 2022 15:57:17 +0000</pubDate>
+      
+      <guid>http://eoincoogan.com/posts/electriciy_web_scraper/</guid>
+      <description>Building an app on AWS to help save energy bills and the environment
+The idea behind this article came to me a while back. While writing a previous article about predicting energy demand I thought of the idea to build an app that would notify users when electricity prices are high. Originally this was an addition to the previous application but I quickly realized that regular people would get more benefit out of it.</description>
+    </item>
+    
+    <item>
+      <title>Building an IoT CI/CD pipeline (AWS, Ansible, Jenkins, Docker and git)</title>
+      <link>http://eoincoogan.com/posts/iot_ci_cd_pipeline/</link>
+      <pubDate>Tue, 01 Nov 2022 15:52:14 +0000</pubDate>
+      
+      <guid>http://eoincoogan.com/posts/iot_ci_cd_pipeline/</guid>
+      <description>The rise of the Internet of Things has forced people to re-think how software for embedded systems gets developed. As devices become more connected, traditional project management frameworks are no longer viable. With these small devices with less computational ability and memory a continuous integration and deployment pipeline that allows the team to follow Agile/Scrum methodologies is needed. In this article, I am going to go over how I built a CI/CD pipeline for an IoT project I was working on.</description>
+    </item>
+    
+    <item>
+      <title>Decentralised Filesharing Platform With Kademlia and Iota</title>
+      <link>http://eoincoogan.com/posts/decentralised_server/</link>
+      <pubDate>Tue, 01 Nov 2022 14:41:40 +0000</pubDate>
+      
+      <guid>http://eoincoogan.com/posts/decentralised_server/</guid>
+      <description>It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes.</description>
+    </item>
+    
+  </channel>
+</rss>

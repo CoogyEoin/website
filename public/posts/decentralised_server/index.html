@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Decentralised Filesharing Platform With Kademlia and Iota | Eoin&#39;s Website</title>
+<meta name="keywords" content="">
+<meta name="description" content="It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes.">
+<meta name="author" content="">
+<link rel="canonical" href="http://eoincoogan.com/posts/decentralised_server/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://eoincoogan.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://eoincoogan.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://eoincoogan.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://eoincoogan.com/apple-touch-icon.png">
+<link rel="mask-icon" href="http://eoincoogan.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Decentralised Filesharing Platform With Kademlia and Iota" />
+<meta property="og:description" content="It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://eoincoogan.com/posts/decentralised_server/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-01T14:41:40+00:00" />
+<meta property="article:modified_time" content="2022-11-01T14:41:40+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Decentralised Filesharing Platform With Kademlia and Iota"/>
+<meta name="twitter:description" content="It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://eoincoogan.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Decentralised Filesharing Platform With Kademlia and Iota",
+      "item": "http://eoincoogan.com/posts/decentralised_server/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Decentralised Filesharing Platform With Kademlia and Iota",
+  "name": "Decentralised Filesharing Platform With Kademlia and Iota",
+  "description": "It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes.",
+  "keywords": [
+    
+  ],
+  "articleBody": "It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes.\nSoftware Libraries used Kadence library Iota javascript library Overview Kademlia is a distributed hash table. It uses key-value pairs similarly to regular hash maps but it stores them on various nodes connected to it. It searches for the node with an ID that closely resembles the key in the routing table of each node until it finds the closest match. This allows it to find and store data in O(log(n)) time while only needing a small amount of addresses in the routing table. I used the Kadence library to implement a Kademlia network.\nIota is a distributed ledger technology similar to blockchain but has a completely different structure. It is incredibly fast and is useful for projects where you use micro transactions.\nA basic Kademlia node will be ran that allows us to store and retrieve small bits of data and the Iota token will be used to pay small amounts to any node that stores the data.\nProject Discussion Kademlia requires two or more nodes to store data on the network. In my code I set up two nodes running on localhost and used the join method so one would connect to the other.\nconst node = new kadence.KademliaNode({ identity: kadence.utils.getRandomKeyBuffer(), transport: new kadence.UDPTransport(), storage: levelup(encode(leveldown('database'))), contact: { hostname: 'localhost', port: 1337 } }); //Creating second node object// const nodeTwo = new kadence.KademliaNode({ identity: kadence.utils.getRandomKeyBuffer(), transport: new kadence.UDPTransport(), storage: levelup(encode(leveldown('secondDB'))), contact: { hostname: 'localhost', port: 8080 } }); //Listening on ports of each node// node.listen(1337); nodeTwo.listen(8080); //Node joins network through nodeTwo// node.join([ nodeTwo.identity, { hostname: 'localhost', port: 8080 }], async () =\u003e { //Rest of the article's code //goes in here besides the use //Methods and the sendIota function }); The next thing required is to use the iterativeStore() function. This takes a key and a value as parameters. It finds K closest node IDs to the key and stores them on that node’s local storage.\n//Details for key and Value we want to store// const key = kadence.utils.getRandomKeyBuffer(); const Value = 'Elon Did Nothing Wrong' console.log('The key is: '); console.log(key); node.iterativeStore(key, Value, function (err, data) { if (err) { return console.error(err); } else{ console.log(data); } }); The KadenceNode class also has a function called iterativeFindValue. It normally returns an array of Entities which are a type with a Node ID, value and timestamp. This is what is needed to return the value again but for some reason when you first call the function it just returns an Array of Node IDs that the value was stored on. Happy accident since I can use this to send Iota tokens to all the nodes. I made a handler for each of the nodes that would send their Iota address. I then created a function called sendIota() that would connect to an Iota full node, prepare a transaction then attach it to the tangle.\nnode.use('IOTA', (req, res) =\u003e { const iota = 'QVFEHDRITCVU9LTPSNQGGQRELGSSBOMQG9XFWSLBRTUYDZMUFLSOWGYNS9ZW9UOAYWSBBJKHFZESDGWMZOQKDQOUSY'; res.send(iota); }); nodeTwo.use('IOTA', (req, res) =\u003e { const iota = 'CEEMLNFZSOOXVCTDNXZXWZBVVYZTJW9XKBWPHXKABB9FCSJMNLXZJ9UZTODXBSFSGRCYOILEFSQSTREPY9EGVFZTHZ'; res.send(iota); }); function sendIota(Address, Seed){ const iota = iotaCore.composeAPI({ provider: 'https://testnet140.tangle.works'}) const msg = converter.asciiToTrytes('Thanks for the storage'); // Array of transfers which defines transfer recipients and value transferred in IOTAs. const transfers = [{ address: Address, value: 0, // 1Ki tag: '', // optional tag of 0-27 trytes message: msg // optional message in trytes }] iota.prepareTransfers(Seed, transfers) .then(trytes =\u003e iota.sendTrytes(trytes, 3, 14)) .then(bundle =\u003e { console.log(`Published transaction with tail hash: ${bundle[0].hash}`) console.log(`Bundle: ${bundle}`) res.send(bundle[0].hash) }) .catch(err =\u003e { // catch any errors }) } The last thing I needed to do was search through the array of Node IDs returned by the iterativeFindValue() function and call the sendIota() function for each address. I did this using a for loop.\nnode.iterativeFindValue(key, function (error, value, contact){ if (error) { return console.error(err); } else{ const resp = value; //const publisher = value.publisher; const len = resp.length; for(var i = 0; i \u003c len; i++){ node.send('IOTA', ['Iota Address'], resp[i], function (err, result){ if (error) { return console.error(err); } else{ console.log(result); sendIota(result, mySeed); } }); } } }); The code creates two nodes and stores data across each of them. It then sends Iota tokens to the address of any node that stores the data. This is a very broad overview of how DHTs and Iota could be used for storing files and is not meant to actually be used. My code can be found in my github below along with my social media.\nThanks for reading.\nGithub Repo\n",
+  "wordCount" : "823",
+  "inLanguage": "en",
+  "datePublished": "2022-11-01T14:41:40Z",
+  "dateModified": "2022-11-01T14:41:40Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://eoincoogan.com/posts/decentralised_server/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Eoin's Website",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://eoincoogan.com/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://eoincoogan.com/" accesskey="h" title="Eoin&#39;s Website (Alt + H)">Eoin&#39;s Website</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Decentralised Filesharing Platform With Kademlia and Iota
+    </h1>
+    <div class="post-meta"><span title='2022-11-01 14:41:40 +0000 UTC'>November 1, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>It has been said that the most valuable resource in the 21st century is no longer oil but data. With most of the data being controlled by 6 or 7 tech companies many people have started developing peer to peer/ decentralized systems again to try and take back control of data and mitigate the risk of relying on cloud providers. In this article I’ll explore the use of the Kademlia DHT and the Iota tangle for storing data on a decentralized network of nodes.</p>
+<h3 id="software-libraries-used">Software Libraries used<a hidden class="anchor" aria-hidden="true" href="#software-libraries-used">#</a></h3>
+<ul>
+<li><a href="https://kadence.github.io/">Kadence library</a></li>
+<li><a href="https://github.com/iotaledger/iota.js">Iota javascript library</a></li>
+</ul>
+<h3 id="overview">Overview<a hidden class="anchor" aria-hidden="true" href="#overview">#</a></h3>
+<p>Kademlia is a distributed hash table. It uses key-value pairs similarly to regular hash maps but it stores them on various nodes connected to it. It searches for the node with an ID that closely resembles the key in the routing table of each node until it finds the closest match. This allows it to find and store data in O(log(n)) time while only needing a small amount of addresses in the routing table. I used the Kadence library to implement a Kademlia network.</p>
+<p>Iota is a distributed ledger technology similar to blockchain but has a completely different structure. It is incredibly fast and is useful for projects where you use micro transactions.</p>
+<p>A basic Kademlia node will be ran that allows us to store and retrieve small bits of data and the Iota token will be used to pay small amounts to any node that stores the data.</p>
+<h3 id="project-discussion">Project Discussion<a hidden class="anchor" aria-hidden="true" href="#project-discussion">#</a></h3>
+<p>Kademlia requires two or more nodes to store data on the network. In my code I set up two nodes running on localhost and used the join method so one would connect to the other.</p>
+<pre><code>const node = new kadence.KademliaNode({
+  identity: kadence.utils.getRandomKeyBuffer(),
+  transport: new kadence.UDPTransport(),
+  storage: levelup(encode(leveldown('database'))),
+  contact: { hostname: 'localhost', port: 1337 }
+});
+//Creating second node object//
+const nodeTwo = new kadence.KademliaNode({
+  identity: kadence.utils.getRandomKeyBuffer(),
+  transport: new kadence.UDPTransport(),
+  storage: levelup(encode(leveldown('secondDB'))),
+  contact: { hostname: 'localhost', port: 8080 }
+});
+//Listening on ports of each node//
+node.listen(1337);
+nodeTwo.listen(8080);
+
+//Node joins network through nodeTwo//
+node.join([ nodeTwo.identity, {
+  hostname: 'localhost',
+  port: 8080
+}], async () =&gt; {
+//Rest of the article's code
+//goes in here besides the use
+//Methods and the sendIota function
+});
+</code></pre>
+<p>The next thing required is to use the iterativeStore() function. This takes a key and a value as parameters. It finds K closest node IDs to the key and stores them on that node’s local storage.</p>
+<pre><code>//Details for key and Value we want to store//
+const key = kadence.utils.getRandomKeyBuffer();
+const Value = 'Elon Did Nothing Wrong'
+console.log('The key is: ');
+console.log(key);
+
+node.iterativeStore(key, Value, function (err, data) {
+  if (err) {
+   	    return console.error(err);
+  }
+	  else{
+   	    console.log(data); 
+	  }
+});
+</code></pre>
+<p>The KadenceNode class also has a function called iterativeFindValue. It normally returns an array of Entities which are a type with a Node ID, value and timestamp. This is what is needed to return the value again but for some reason when you first call the function it just returns an Array of Node IDs that the value was stored on. Happy accident since I can use this to send Iota tokens to all the nodes. I made a handler for each of the nodes that would send their Iota address. I then created a function called sendIota() that would connect to an Iota full node, prepare a transaction then attach it to the tangle.</p>
+<pre><code>node.use('IOTA', (req, res) =&gt; {
+		const iota = 'QVFEHDRITCVU9LTPSNQGGQRELGSSBOMQG9XFWSLBRTUYDZMUFLSOWGYNS9ZW9UOAYWSBBJKHFZESDGWMZOQKDQOUSY';
+		res.send(iota);
+});
+nodeTwo.use('IOTA', (req, res) =&gt; {
+  		const iota = 'CEEMLNFZSOOXVCTDNXZXWZBVVYZTJW9XKBWPHXKABB9FCSJMNLXZJ9UZTODXBSFSGRCYOILEFSQSTREPY9EGVFZTHZ';
+		res.send(iota);
+});
+
+function sendIota(Address, Seed){
+	const iota = iotaCore.composeAPI({ provider: 'https://testnet140.tangle.works'})
+
+const msg = converter.asciiToTrytes('Thanks for the storage');
+
+// Array of transfers which defines transfer recipients and value transferred in IOTAs.
+	const transfers = [{
+    	address: Address,
+    	value: 0, // 1Ki
+    	tag: '', // optional tag of 0-27 trytes
+    	message: msg // optional message in trytes
+	}]
+
+iota.prepareTransfers(Seed, transfers)
+.then(trytes =&gt; iota.sendTrytes(trytes, 3, 14))
+.then(bundle =&gt; {
+		console.log(`Published transaction with tail hash: ${bundle[0].hash}`)
+		console.log(`Bundle: ${bundle}`)
+
+		res.send(bundle[0].hash)
+})
+.catch(err =&gt; {
+		// catch any errors
+})
+
+}
+</code></pre>
+<p>The last thing I needed to do was search through the array of Node IDs returned by the iterativeFindValue() function and call the sendIota() function for each address. I did this using a for loop.</p>
+<pre><code>node.iterativeFindValue(key, function (error, value, contact){
+	if (error) {
+   		return console.error(err);
+}
+	else{ 
+    const resp = value;
+    //const publisher = value.publisher;
+    const len = resp.length;
+
+	for(var i = 0; i &lt; len; i++){
+
+	node.send('IOTA', ['Iota Address'], resp[i], function (err, result){
+    if (error) {
+       return console.error(err);
+    }  
+    else{
+        console.log(result);
+
+        sendIota(result, mySeed);
+    }
+	});
+
+	}
+}
+
+});
+</code></pre>
+<p>The code creates two nodes and stores data across each of them. It then sends Iota tokens to the address of any node that stores the data. This is a very broad overview of how DHTs and Iota could be used for storing files and is not meant to actually be used. My code can be found in my github below along with my social media.</p>
+<p>Thanks for reading.</p>
+<p><a href="https://github.com/CoogyEoin/Decentralised-Kademlia-File-Storage">Github Repo</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="http://eoincoogan.com/">Eoin&#39;s Website</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
